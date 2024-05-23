@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Monthly Averages by Year and Province{% endblock %}
+
+{% block content %}
+    <h1>Monthly Averages for {{ year }}</h1>
+        <form method="get">
+            {{ form.as_p }}
+            <button type="submit">Apply Filters</button>
+        </form>
+    <canvas id="myChart"></canvas>
+
+      <table border="1">
+        <tr>
+            <th>Candidate</th>
+            <th>Score</th>
+            <th>Scoring Date</th>
+            <th>Province</th>
+        </tr>
+        {% for record in records %}
+        <tr>
+            <td>{{ record.candidate }}</td>
+            <td>{{ record.score }}</td>
+            <td>{{ record.scoring_date }}</td>
+            <td>{{ record.province }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <script>
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                datasets: [{
+                    label: 'Average Score',
+                    data: {{ averages|safe }},
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 3
+                }]
+            }
+        });
+    </script>
+{% endblock %}

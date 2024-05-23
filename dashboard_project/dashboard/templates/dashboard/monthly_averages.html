@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Monthly Averages{% endblock %}
+
+{% block content %}
+    <h1>Monthly Averages for {{ year }}</h1>
+    <select id="year-select" onchange="filterYear()">
+        <option value="">Select Year</option>
+        <option value="2020">2020</option>
+        <option value="2021">2021</option>
+    </select>
+    <canvas id="myChart"></canvas>
+    <script>
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                {#labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],#}
+                datasets: [{
+                    label: 'Average Score',
+                    data: {{ averages|safe }},
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 3
+                }]
+            }
+        });
+
+        function filterYear() {
+            const year = document.getElementById('year-select').value;
+            window.location.href = `?year=${year}`;
+        }
+    </script>
+{% endblock %}
